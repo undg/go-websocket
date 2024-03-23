@@ -43,8 +43,6 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Ws Page hit by client")
 
-	// fmt.Fprintf(w, "Welcome on 'ws' endpoint")
-
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	// upgrade to WebSocket connection
@@ -54,6 +52,11 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Client connected")
+
+	err = ws.WriteMessage(1, []byte("Hi Client!"))
+	if err != nil {
+		log.Println(err)
+	}
 	reader(ws)
 }
 
