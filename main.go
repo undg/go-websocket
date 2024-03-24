@@ -24,12 +24,20 @@ func reader(conn *websocket.Conn) {
 		}
 
 		// Print for clarity
-		fmt.Println(string(p))
+		fmt.Println("client msg:", string(p))
 
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
+		if string(p) == "ping" {
+			fmt.Println("Pong")
+			if err := conn.WriteMessage(messageType, []byte("Pong")); err != nil {
+				log.Println(err)
+				return
+			}
 		}
+
+		// if err := conn.WriteMessage(messageType, p); err != nil {
+		// 	log.Println(err)
+		// 	return
+		// }
 
 	}
 }
