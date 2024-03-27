@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -12,6 +13,8 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
+
+const writeWait = 10 * time.Second
 
 func reader(conn *websocket.Conn) {
 	for {
@@ -34,10 +37,11 @@ func reader(conn *websocket.Conn) {
 			}
 		}
 
-		// if err := conn.WriteMessage(messageType, p); err != nil {
-		// 	log.Println(err)
-		// 	return
-		// }
+		msg := "your msg: '" + string(p) + "'"
+		if err := conn.WriteMessage(messageType, []byte(msg)); err != nil {
+			log.Println(err)
+			return
+		}
 
 	}
 }
